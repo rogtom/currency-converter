@@ -13,7 +13,7 @@ const converterSlice = createSlice({
 			state.rate = action.payload;
 		},
 		saveTransaction: (state, action) => {
-			state.transactionList.push(action.payload);
+			state.transactionList = [...state.transactionList, action.payload];
 		},
 	},
 });

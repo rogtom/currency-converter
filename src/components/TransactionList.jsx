@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Grid,
 	Paper,
@@ -16,17 +16,20 @@ const totalValue = (el1, el2) => {
 };
 
 const TransactionList = () => {
+	const [maxValue, setMaxValue] = useState('');
+	const currentRate = useSelector((state) => state.converter.rate);
 	const currentTransactionList = useSelector(
 		(state) => state.converter.transactionList
 	);
-
-	const currentRate = useSelector((state) => state.converter.rate);
-
-	const maxTransactionValue = () => {
-		let a = currentTransactionList.filter((el) => Math.max(el.value));
-		return a[0];
-	};
-	console.log(maxTransactionValue().length);
+	useEffect(() => {
+		const max =
+			currentTransactionList.length !== 0 &&
+			currentTransactionList?.reduce((prev, current) =>
+				prev.value > current.value ? prev : current
+			);
+		setMaxValue(max);
+		// currentTransactionList.filter((el) => Math.max(el.value))
+	}, [currentRate, currentTransactionList]);
 
 	return (
 		<Paper>
@@ -44,7 +47,7 @@ const TransactionList = () => {
 							<TableRow>
 								<TableCell align='right'>Nr</TableCell>
 								<TableCell align='right'>Name</TableCell>
-								<TableCell align='right'>value</TableCell>
+								<TableCell align='right'>Value</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -68,13 +71,15 @@ const TransactionList = () => {
 					<Typography align='center'>Highest transaction</Typography>
 
 					<Typography>
-						{`Name: ${maxTransactionValue().title}`}
+						{maxValue ? `Name: ${maxValue.title}` : null}
 					</Typography>
 					<Typography>
-						{`Value: ${totalValue(
-							maxTransactionValue().value,
-							currentRate
-						)} PLN`}
+						{maxValue
+							? `Value:  ${totalValue(
+									maxValue.value,
+									currentRate
+							  )}PLN`
+							: null}
 					</Typography>
 				</Grid>
 			</Grid>
