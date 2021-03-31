@@ -69,7 +69,8 @@ const TransactionList = () => {
 							<TableRow>
 								<TableCell align='right'>Nr</TableCell>
 								<TableCell align='right'>Name</TableCell>
-								<TableCell align='right'>Value</TableCell>
+								<TableCell align='right'>EUR</TableCell>
+								<TableCell align='right'>PLN</TableCell>
 								<TableCell align='right'>Delete</TableCell>
 							</TableRow>
 						</TableHead>
@@ -83,10 +84,10 @@ const TransactionList = () => {
 										{el.title}
 									</TableCell>
 									<TableCell align='right'>
-										{`${totalValue(
-											el.value,
-											currentRate
-										)} PLN`}
+										{el.value.toFixed(2)}
+									</TableCell>
+									<TableCell align='right'>
+										{`${totalValue(el.value, currentRate)}`}
 									</TableCell>
 									<TableCell align='right'>
 										<IconButton
@@ -106,34 +107,34 @@ const TransactionList = () => {
 								<TableCell align='right' colSpan={2}>
 									Total
 								</TableCell>
-								<TableCell align='right'>
+								<TableCell align='right' colSpan={2}>
 									{`${totalValue(
 										sumAllTransactions(),
 										currentRate
-									)} PLN`}
+									)} `}
 								</TableCell>
 							</TableRow>
 						</TableBody>
 					</Table>
 				</Grid>
 				<Grid item xs={12} md={4}>
-					<Box p={1}>
+					<Box p={2}>
 						<Typography variant='h6'>
 							Highest transaction
 						</Typography>
 
 						<Typography>
-							{maxValue ? `Name: ${maxValue.title}` : null}
+							{maxValue ? `Name : ${maxValue.title}` : null}
 						</Typography>
 						<Typography>
-							{maxValue ? `Value: ${maxValue.value} EUR` : null}
+							{maxValue ? `EUR : ${maxValue.value} ` : null}
 						</Typography>
 						<Typography>
 							{maxValue
-								? `Value:  ${totalValue(
+								? `PLN :  ${totalValue(
 										maxValue.value,
 										currentRate
-								  )} PLN`
+								  )} `
 								: null}
 						</Typography>
 					</Box>
