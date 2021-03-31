@@ -32,11 +32,6 @@ const Converter = ({ handleOpen }) => {
 		dispatch(saveRate(rate));
 	}, [rate, dispatch]);
 
-	// const handleClick = () => {
-	// 	dispatch(saveRate(rate));
-	// 	rate ? setBtnDisabled(false) : setBtnDisabled(true);
-	// };
-
 	return (
 		<>
 			<Card className={classes.root}>
