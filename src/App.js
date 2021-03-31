@@ -24,7 +24,7 @@ function App() {
 					component='h1'
 					align='center'
 					color='primary'>
-					currency converter
+					Currency Converter
 				</Typography>
 			</Box>
 			<Grid container spacing={2}>

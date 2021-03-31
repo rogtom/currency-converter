@@ -11,15 +11,31 @@ import {
 	TableRow,
 	Typography,
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteTransaction } from '../features/converterSlice';
+const useStyles = makeStyles({
+	root: {
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		padding: '20px 0',
+		height: '100%',
+	},
+	table: {
+		margin: '20px',
+	},
+});
 
 const totalValue = (el1, el2) => {
 	return Number.parseFloat(+el1 * +el2).toFixed(2);
 };
 
 const TransactionList = () => {
+	const classes = useStyles();
+
 	const [maxValue, setMaxValue] = useState('');
 	const currentRate = useSelector((state) => state.converter.rate);
 	const currentTransactionList = useSelector(
@@ -54,7 +70,7 @@ const TransactionList = () => {
 	};
 
 	return (
-		<Paper>
+		<Paper className={classes.root}>
 			<Typography
 				variant='h5'
 				component='h2'
@@ -64,7 +80,7 @@ const TransactionList = () => {
 			</Typography>
 			<Grid container alignItems='center' spacing={4}>
 				<Grid item xs={12} md={8}>
-					<Table>
+					<Table className={classes.table}>
 						<TableHead>
 							<TableRow>
 								<TableCell align='right'>Nr</TableCell>

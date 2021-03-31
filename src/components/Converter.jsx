@@ -9,6 +9,7 @@ const useStyles = makeStyles({
 		flexDirection: 'column',
 		alignItems: 'center',
 		padding: '20px 0',
+		height: '100%',
 	},
 	title: {
 		marginBottom: 30,
