@@ -4,8 +4,21 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Converter from './components/Converter';
 import TransactionList from './components/TransactionList';
 import TransitionsModal from './components/Transaction';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+	root: {
+		height: '100vh',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+});
 
 function App() {
+	const classes = useStyles();
+
 	const [open, setOpen] = React.useState(false);
 
 	const handleOpen = () => {
@@ -16,7 +29,7 @@ function App() {
 		setOpen(false);
 	};
 	return (
-		<Container>
+		<Container className={classes.root}>
 			<CssBaseline />
 			<Box mt={10} mb={5}>
 				<Typography
