@@ -15,8 +15,15 @@ const converterSlice = createSlice({
 		saveTransaction: (state, action) => {
 			state.transactionList = [...state.transactionList, action.payload];
 		},
+		deleteTransaction: (state, action) => {
+			state.transactionList = action.payload;
+		},
 	},
 });
 
-export const { saveRate, saveTransaction } = converterSlice.actions;
+export const {
+	saveRate,
+	saveTransaction,
+	deleteTransaction,
+} = converterSlice.actions;
 export default converterSlice.reducer;

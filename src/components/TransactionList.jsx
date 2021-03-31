@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
+	Box,
 	Grid,
+	IconButton,
 	Paper,
 	Table,
 	TableBody,
@@ -9,7 +11,9 @@ import {
 	TableRow,
 	Typography,
 } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteTransaction } from '../features/converterSlice';
 
 const totalValue = (el1, el2) => {
 	return Number.parseFloat(+el1 * +el2).toFixed(2);
@@ -21,15 +25,33 @@ const TransactionList = () => {
 	const currentTransactionList = useSelector(
 		(state) => state.converter.transactionList
 	);
+
+	const dispatch = useDispatch();
+
 	useEffect(() => {
 		const max =
 			currentTransactionList.length !== 0 &&
-			currentTransactionList?.reduce((prev, current) =>
+			currentTransactionList.reduce((prev, current) =>
 				prev.value > current.value ? prev : current
 			);
 		setMaxValue(max);
-		// currentTransactionList.filter((el) => Math.max(el.value))
-	}, [currentRate, currentTransactionList]);
+	}, [currentRate, currentTransactionList, deleteTransaction]);
+
+	const handleDelete = (transactionId) => {
+		const filtered = currentTransactionList.filter(
+			(el) => el.id !== transactionId
+		);
+		dispatch(deleteTransaction(filtered));
+	};
+	const sumAllTransactions = () => {
+		return (
+			currentTransactionList.length !== 0 &&
+			currentTransactionList.reduce(
+				(accum, item) => +accum + +item.value,
+				0
+			)
+		);
+	};
 
 	return (
 		<Paper>
@@ -41,13 +63,14 @@ const TransactionList = () => {
 				Transaction List
 			</Typography>
 			<Grid container alignItems='center' spacing={4}>
-				<Grid item xs={6}>
+				<Grid item xs={12} md={8}>
 					<Table>
 						<TableHead>
 							<TableRow>
 								<TableCell align='right'>Nr</TableCell>
 								<TableCell align='right'>Name</TableCell>
 								<TableCell align='right'>Value</TableCell>
+								<TableCell align='right'>Delete</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
@@ -60,27 +83,60 @@ const TransactionList = () => {
 										{el.title}
 									</TableCell>
 									<TableCell align='right'>
-										{totalValue(el.value, currentRate)}
+										{`${totalValue(
+											el.value,
+											currentRate
+										)} PLN`}
+									</TableCell>
+									<TableCell align='right'>
+										<IconButton
+											aria-label='delete'
+											onClick={(e) =>
+												handleDelete(el.id)
+											}>
+											<DeleteIcon
+												fontSize='small'
+												color='error'
+											/>
+										</IconButton>
 									</TableCell>
 								</TableRow>
 							))}
+							<TableRow>
+								<TableCell align='right' colSpan={2}>
+									Total
+								</TableCell>
+								<TableCell align='right'>
+									{`${totalValue(
+										sumAllTransactions(),
+										currentRate
+									)} PLN`}
+								</TableCell>
+							</TableRow>
 						</TableBody>
 					</Table>
 				</Grid>
-				<Grid item xs={6}>
-					<Typography align='center'>Highest transaction</Typography>
+				<Grid item xs={12} md={4}>
+					<Box p={1}>
+						<Typography variant='h6'>
+							Highest transaction
+						</Typography>
 
-					<Typography>
-						{maxValue ? `Name: ${maxValue.title}` : null}
-					</Typography>
-					<Typography>
-						{maxValue
-							? `Value:  ${totalValue(
-									maxValue.value,
-									currentRate
-							  )}PLN`
-							: null}
-					</Typography>
+						<Typography>
+							{maxValue ? `Name: ${maxValue.title}` : null}
+						</Typography>
+						<Typography>
+							{maxValue ? `Value: ${maxValue.value} EUR` : null}
+						</Typography>
+						<Typography>
+							{maxValue
+								? `Value:  ${totalValue(
+										maxValue.value,
+										currentRate
+								  )} PLN`
+								: null}
+						</Typography>
+					</Box>
 				</Grid>
 			</Grid>
 		</Paper>

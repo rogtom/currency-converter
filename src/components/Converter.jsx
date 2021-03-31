@@ -23,15 +23,31 @@ const useStyles = makeStyles({
 
 const Converter = ({ handleOpen }) => {
 	const [rate, setRate] = useState('');
+	const [validate, setValidate] = useState({
+		isValid: true,
+		errorMessage: '',
+	});
 
 	const dispatch = useDispatch();
 
 	const classes = useStyles();
 
 	useEffect(() => {
-		dispatch(saveRate(rate));
+		dispatch(saveRate(+rate));
 	}, [rate, dispatch]);
 
+	const rateValidation = () => {
+		const regex = /^[+]?\d+(\.\d+)?$/;
+		setValidate(
+			regex.test(rate)
+				? { ...validate, isValid: true, errorMessage: '' }
+				: {
+						...validate,
+						isValid: false,
+						errorMessage: 'Wrong value of rate. Use eg. "x.xxxx"',
+				  }
+		);
+	};
 	return (
 		<>
 			<Card className={classes.root}>
@@ -48,6 +64,7 @@ const Converter = ({ handleOpen }) => {
 				</Typography>
 
 				<TextField
+					error={!validate.isValid}
 					className={classes.rateField}
 					label='Your exchange rate'
 					placeholder='type value eg. 4.441'
@@ -56,11 +73,12 @@ const Converter = ({ handleOpen }) => {
 					size='small'
 					type='number'
 					value={rate}
-					onChange={(e) => setRate(e.target.value)}
+					helperText={validate.errorMessage}
+					onBlur={rateValidation}
+					onChange={(e) => {
+						setRate(e.target.value);
+					}}
 				/>
-				{/* <Button variant='contained' onClick={handleClick}>
-					add rate
-				</Button> */}
 
 				<Button
 					disabled={rate ? false : true}
